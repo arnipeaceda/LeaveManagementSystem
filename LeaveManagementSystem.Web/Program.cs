@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using LeaveManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using LeaveManagementSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddTransient<IEmailSender<ApplicationUser>, EmailSender>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -36,6 +40,7 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

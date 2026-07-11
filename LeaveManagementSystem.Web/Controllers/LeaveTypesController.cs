@@ -4,12 +4,14 @@ using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Models.LeaveTypes;
 using LeaveManagementSystem.Services;
 using LeaveManagementSystem.Web.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[Authorize(Roles = Roles.Administrator)]
 public class LeaveTypesController(ILeaveTypeService _leaveTypeService) : Controller
 {
-
+    
     public const string NameExistsValidationMessage = "Leave type already exists.";
 
     // GET: LEAVETYPES
