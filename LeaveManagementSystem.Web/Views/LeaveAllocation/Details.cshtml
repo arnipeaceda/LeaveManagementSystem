@@ -1,4 +1,5 @@
-﻿@model EmployeeAllocationsVM
+﻿@using LeaveManagementSystem.Common.Static
+@model EmployeeAllocationsVM
 @{
     ViewData["Title"] = "View Allocations";
     var isAdmin = User.IsInRole(Roles.Administrator);

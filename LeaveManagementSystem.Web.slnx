@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="LeaveManagement.Application/LeaveManagement.Application.csproj" Id="b4035139-37c2-4f74-9ff9-50347665e5be" />
+  <Project Path="LeaveManagementSystem.Common/LeaveManagementSystem.Common.csproj" Id="bf5e863d-55c0-41ae-a90d-162cab7ee7a8" />
+  <Project Path="LeaveManagementSystem.Data/LeaveManagementSystem.Data.csproj" Id="ffe5dbfb-0f06-45ef-b957-864a0a2ce5d7" />
   <Project Path="LeaveManagementSystem.Web/LeaveManagementSystem.csproj" />
 </Solution>

@@ -1,7 +1,6 @@
 ﻿using LeaveManagementSystem.Models.LeaveAllocations;
 using LeaveManagementSystem.Services.LeaveAllocations;
 using LeaveManagementSystem.Services.LeaveTypes;
-using Microsoft.AspNetCore.Mvc;
 
 namespace LeaveManagementSystem.Controllers
 {
@@ -60,7 +59,7 @@ namespace LeaveManagementSystem.Controllers
             return View(allocation);
         }
         public async Task<IActionResult> Details(string? userId)
-        {     
+        {
             var employeeVm = await _leaveAllocationService.GetEmployeeAllocations(userId);
             return View(employeeVm);
         }
