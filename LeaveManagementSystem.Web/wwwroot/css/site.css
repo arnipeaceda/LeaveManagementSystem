@@ -16,7 +16,9 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+.left-sidebar {
+    top: 0 !important;
+}
 body {
   margin-bottom: 60px;
 }
