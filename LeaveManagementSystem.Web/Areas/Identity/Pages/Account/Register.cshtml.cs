@@ -17,6 +17,7 @@ public class RegisterModel : PageModel
     private readonly IUserEmailStore<ApplicationUser> _emailStore;
     private readonly ILogger<RegisterModel> _logger;
     private readonly IEmailSender<ApplicationUser> _emailSender;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
     public RegisterModel(
         UserManager<ApplicationUser> userManager,
@@ -25,7 +26,8 @@ public class RegisterModel : PageModel
         RoleManager<IdentityRole> roleManager,
         SignInManager<ApplicationUser> signInManager,
         ILogger<RegisterModel> logger,
-        IEmailSender<ApplicationUser> emailSender)
+        IEmailSender<ApplicationUser> emailSender,
+        IWebHostEnvironment hostEnvironment)
     {
         _userManager = userManager;
         _leaveAllocationsService = leaveAllocationsService;
@@ -35,6 +37,7 @@ public class RegisterModel : PageModel
         _signInManager = signInManager;
         _logger = logger;
         _emailSender = emailSender;
+        _hostEnvironment = hostEnvironment;
     }
 
     /// <summary>
@@ -153,7 +156,8 @@ public class RegisterModel : PageModel
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme)!;
 
-                //await _emailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+               
+                await _emailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
