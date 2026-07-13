@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using LeaveManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using LeaveManagementSystem.Services.LeaveAllocations;
 
 namespace LeaveManagementSystem.Areas.Identity.Pages.Account;
 
@@ -26,6 +27,7 @@ public class RegisterModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILeaveAllocationsService _leaveAllocationsService;
     private readonly IUserStore<ApplicationUser> _userStore;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IUserEmailStore<ApplicationUser> _emailStore;
@@ -34,6 +36,7 @@ public class RegisterModel : PageModel
 
     public RegisterModel(
         UserManager<ApplicationUser> userManager,
+        ILeaveAllocationsService leaveAllocationsService,
         IUserStore<ApplicationUser> userStore,
         RoleManager<IdentityRole> roleManager,
         SignInManager<ApplicationUser> signInManager,
@@ -41,6 +44,7 @@ public class RegisterModel : PageModel
         IEmailSender<ApplicationUser> emailSender)
     {
         _userManager = userManager;
+        _leaveAllocationsService = leaveAllocationsService;
         _userStore = userStore;
         this.roleManager = roleManager;
         _emailStore = GetEmailStore();
@@ -156,6 +160,7 @@ public class RegisterModel : PageModel
 
                 await _userManager.AddToRoleAsync(user, Input.RoleName);
                 var userId = await _userManager.GetUserIdAsync(user);
+                await _leaveAllocationsService.AllocateLeave(userId);
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
@@ -164,7 +169,7 @@ public class RegisterModel : PageModel
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme)!;
 
-                await _emailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+                //await _emailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)

@@ -2,7 +2,7 @@
 using AutoMapper;
 using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Models.LeaveTypes;
-using LeaveManagementSystem.Services;
+using LeaveManagementSystem.Services.LeaveTypes;
 using LeaveManagementSystem.Web.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

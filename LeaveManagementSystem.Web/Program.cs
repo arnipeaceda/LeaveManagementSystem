@@ -1,9 +1,15 @@
+using AutoMapper;
+using LeaveManagementSystem.Data;
+using LeaveManagementSystem.Services.Email;
+using LeaveManagementSystem.Services.LeaveAllocations;
+using LeaveManagementSystem.Services.LeaveRequests;
+using LeaveManagementSystem.Services.LeaveTypes;
+using LeaveManagementSystem.Services.Periods;
+using LeaveManagementSystem.Services.Users;
 using LeaveManagementSystem.Web.Data;
 using Microsoft.AspNetCore.Identity;
-using LeaveManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using LeaveManagementSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +20,26 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
+builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+builder.Services.AddScoped<ILeaveAllocationsService, LeaveAllocationsService>();
+builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
+builder.Services.AddScoped<IPeriodsService, PeriodsService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddTransient<IEmailSender<ApplicationUser>, EmailSender>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminSupervisorOnly", policy =>
+    {
+        policy.RequireRole(Roles.Administrator, Roles.Supervisor);
+    });
+   
+});
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
